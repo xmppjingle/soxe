@@ -8,6 +8,9 @@
 -define(AUDIO_WAV, "test/alesis_acoustic_bass.wav").
 -define(AUDIO_GSM, "test/alesis_acoustic_bass.gsm").
 
+-define(AUDIO_SILENCE,      "test/totrim.wav").
+-define(AUDIO_SILENCE_TRIM, "test/trimmed.wav").
+
 info_test() ->
     ok = soxe:start(),
     Info = #soxe_info{ filename = ?AUDIO_WAV,
@@ -32,5 +35,11 @@ convert_test() ->
                        audio_length = 0,
                        duration = 0 },
     ?assertEqual(Info, soxe:info(?AUDIO_GSM)),
+    ok = soxe:stop(),
+    ok.
+
+trim_silence_test() ->
+    ok = soxe:start(),
+    ok = soxe:trim_silence(?AUDIO_SILENCE, ?AUDIO_SILENCE_TRIM, 0, "1", "0.1", "0.3"),
     ok = soxe:stop(),
     ok.

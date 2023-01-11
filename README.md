@@ -23,3 +23,9 @@ soxe:info("audio.mp3").
 ```
 
 NOTE: the sox library is required and all the codecs you want to use for conversion (for example, mp3lame, ffmpeg, ...).
+
+Similar command in shell:
+
+```shell
+sox totrim.wav output4.wav silence 1 0.1 0.4% reverse silence 1 0.1 0.3% reverse
+```
