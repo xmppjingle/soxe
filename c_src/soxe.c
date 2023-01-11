@@ -148,6 +148,11 @@ static ERL_NIF_TERM soxe_trim_silence(ErlNifEnv* env, int argc, const ERL_NIF_TE
         !enif_get_string(env, argv[1], output_path, MAX_PATH_LEN, ERL_NIF_LATIN1)) {
         return enif_make_badarg(env);
     }
+    
+    if (!enif_get_string(env, argv[2], min_duration_str, MAX_PATH_LEN, ERL_NIF_LATIN1) ||
+        !enif_get_string(env, argv[3], threshold_str, MAX_PATH_LEN, ERL_NIF_LATIN1)) {
+        return enif_make_badarg(env);
+    }
 
     /* Open the input file (with default parameters) */
   assert(in = sox_open_read(input_path, NULL, NULL, NULL));
