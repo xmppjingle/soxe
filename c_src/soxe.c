@@ -121,17 +121,10 @@ static ERL_NIF_TERM soxe_info(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[
 
 /*
 Expected parameters: 
-
 input_file_path: The path to the input audio file as a string.
 output_file_path: The path to the output audio file as a string.
-trim_ends: An integer representing which ends of the audio file should be trimmed (beginning, end, or both). This can be one of the following values:
-    -BEGINNING: Trim silence from the beginning of the audio file.
-    -END: Trim silence from the end of the audio file.
-    -BOTH: Trim silence from both the beginning and the end of the audio file.
 min_duration: The minimum duration of a segment of silence to be considered for trimming, in seconds, as a floating point number.
 threshold: The threshold level below which a signal is considered to be silence, as a floating point number between 0 and 1.
-min_length: The minimum length of a segment of silence to be considered for trimming, in seconds, as a floating point number.
-
 */
 static ERL_NIF_TERM soxe_trim_silence(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
     char input_path[MAX_PATH_LEN];
@@ -216,7 +209,7 @@ static ErlNifFunc nif_funcs[] = {
     {"stop", 0, soxe_stop},
     {"convert", 2, soxe_convert},
     {"info", 1, soxe_info},
-    {"trim_silence", 6, soxe_trim_silence}
+    {"trim_silence", 4, soxe_trim_silence}
 };
 
 ERL_NIF_INIT(soxe, nif_funcs, NULL, NULL, upgrade, NULL)

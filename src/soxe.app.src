@@ -7,7 +7,7 @@
         stdlib
     ]},
     {env, []},
-    {maintainers, ["Manuel Rubio"]},
+    {maintainers, ["Manuel Rubio", "Thiago Camargo"]},
     {licenses, ["LGPL 2.1"]},
     {links,[
         {"Github","https://github.com/altenwald/soxe"}

@@ -1,5 +1,5 @@
 -module(soxe).
--export([start/0, stop/0, convert/2, info/1, trim_silence/6]).
+-export([start/0, stop/0, convert/2, info/1, trim_silence/4]).
 -on_load(init/0).
 
 -include("soxe.hrl").
@@ -35,5 +35,5 @@ convert(_Src, _Dst) ->
 info(_Filename) ->
     exit(nif_library_not_loaded).
 
-trim_silence(_Filename, _Filename, _Direction, _MinDuration, _Threshold, _MinLength) ->
+trim_silence(_Filename, _Filename, _MinDuration, _Threshold) ->
     exit(nif_library_not_loaded).
