@@ -136,8 +136,8 @@ min_length: The minimum length of a segment of silence to be considered for trim
 static ERL_NIF_TERM soxe_trim_silence(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
     char input_path[MAX_PATH_LEN];
     char output_path[MAX_PATH_LEN];
-    char* min_duration_str = "0.1";
-    char* threshold_str = "0.4%";
+    char min_duration_str[MAX_THRESHOLD_LEN];
+    char threshold_str[MAX_THRESHOLD_LEN];
     static sox_format_t * in, * out; /* input and output files */
     sox_effects_chain_t * chain;
     sox_effect_t * e;

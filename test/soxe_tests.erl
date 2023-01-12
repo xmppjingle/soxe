@@ -40,6 +40,7 @@ convert_test() ->
 
 trim_silence_test() ->
     ok = soxe:start(),
-    ok = soxe:trim_silence(?AUDIO_SILENCE, ?AUDIO_SILENCE_TRIM, 0, "1", "0.1", "0.3"),
+    ok = soxe:trim_silence(?AUDIO_SILENCE, ?AUDIO_SILENCE_TRIM, "0.1", "0.4%", "0.1", "0.3%"),
+    % soxe:trim_silence("w" ++ ?AUDIO_SILENCE, "w" ++ ?AUDIO_SILENCE_TRIM, 0, "1", "0.1", "0.3"),
     ok = soxe:stop(),
     ok.
