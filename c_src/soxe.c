@@ -148,12 +148,12 @@ static ERL_NIF_TERM soxe_trim_silence(ErlNifEnv* env, int argc, const ERL_NIF_TE
     }
 
     /* Open the input file (with default parameters) */
-  assert(in = sox_open_read(input_path, NULL, NULL, NULL));
+  in = sox_open_read(input_path, NULL, NULL, NULL);
 
   /* Open the output file; we must specify the output signal characteristics.
    * Since we are using only simple effects, they are the same as the input
    * file characteristics */
-  assert(out = sox_open_write(output_path, &in->signal, NULL, NULL, NULL, NULL));
+  out = sox_open_write(output_path, &in->signal, NULL, NULL, NULL, NULL);
 
   /* Create an effects chain; some effects need to know about the input
    * or output file encoding so we provide that information here */
@@ -163,25 +163,25 @@ static ERL_NIF_TERM soxe_trim_silence(ErlNifEnv* env, int argc, const ERL_NIF_TE
    * samples; in this case, we use the built-in handler that inputs
    * data from an audio file */
   e = sox_create_effect(sox_find_effect("input"));
-  args[0] = (char *)in, assert(sox_effect_options(e, 1, args) == SOX_SUCCESS);
+  args[0] = (char *)in, sox_effect_options(e, 1, args) == SOX_SUCCESS;
   /* This becomes the first `effect' in the chain */
-  assert(sox_add_effect(chain, e, &in->signal, &in->signal) == SOX_SUCCESS);
+  sox_add_effect(chain, e, &in->signal, &in->signal) == SOX_SUCCESS;
   free(e);
 
   /* Create the `vol' effect, and initialise it with the desired parameters: */
   e = sox_create_effect(sox_find_effect("silence"));
   char* silence_params[7] = {"-l", "1", min_duration_str, threshold_str, "1", min_duration_str, threshold_str};
-  assert(sox_effect_options(e, 4, silence_params) == SOX_SUCCESS);
+  sox_effect_options(e, 4, silence_params) == SOX_SUCCESS;
   /* Add the effect to the end of the effects processing chain: */
-  assert(sox_add_effect(chain, e, &in->signal, &in->signal) == SOX_SUCCESS);
+  sox_add_effect(chain, e, &in->signal, &in->signal) == SOX_SUCCESS;
   free(e);
 
   /* The last effect in the effect chain must be something that only consumes
    * samples; in this case, we use the built-in handler that outputs
    * data to an audio file */
   e = sox_create_effect(sox_find_effect("output"));
-  args[0] = (char *)out, assert(sox_effect_options(e, 1, args) == SOX_SUCCESS);
-  assert(sox_add_effect(chain, e, &in->signal, &in->signal) == SOX_SUCCESS);
+  args[0] = (char *)out, sox_effect_options(e, 1, args) == SOX_SUCCESS;
+  sox_add_effect(chain, e, &in->signal, &in->signal) == SOX_SUCCESS;
   free(e);
 
   /* Flow samples through the effects processing chain until EOF is reached */
