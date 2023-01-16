@@ -154,10 +154,21 @@ static ERL_NIF_TERM soxe_trim_silence(ErlNifEnv* env, int argc, const ERL_NIF_TE
    * Since we are using only simple effects, they are the same as the input
    * file characteristics */
   out = sox_open_write(output_path, &in->signal, NULL, NULL, NULL, NULL);
+    if (!out) {
+        /* FIXME: change this to another kind of error */
+        sox_close(in);
+        return enif_make_badarg(env);
+    }
 
   /* Create an effects chain; some effects need to know about the input
    * or output file encoding so we provide that information here */
   chain = sox_create_effects_chain(&in->encoding, &out->encoding);
+    if (!chain) {
+        /* FIXME: change this to another kind of error */
+        sox_close(in);
+        sox_close(out);
+        return enif_make_badarg(env);
+    }
 
   /* The first effect in the effect chain must be something that can source
    * samples; in this case, we use the built-in handler that inputs
@@ -165,7 +176,7 @@ static ERL_NIF_TERM soxe_trim_silence(ErlNifEnv* env, int argc, const ERL_NIF_TE
   e = sox_create_effect(sox_find_effect("input"));
   args[0] = (char *)in, sox_effect_options(e, 1, args) == SOX_SUCCESS;
   /* This becomes the first `effect' in the chain */
-  sox_add_effect(chain, e, &in->signal, &in->signal) == SOX_SUCCESS;
+  if(sox_add_effect(chain, e, &in->signal, &in->signal) == SOX_SUCCESS)
   free(e);
 
   /* Create the `vol' effect, and initialise it with the desired parameters: */
@@ -181,7 +192,7 @@ static ERL_NIF_TERM soxe_trim_silence(ErlNifEnv* env, int argc, const ERL_NIF_TE
    * data to an audio file */
   e = sox_create_effect(sox_find_effect("output"));
   args[0] = (char *)out, sox_effect_options(e, 1, args) == SOX_SUCCESS;
-  sox_add_effect(chain, e, &in->signal, &in->signal) == SOX_SUCCESS;
+  if(sox_add_effect(chain, e, &in->signal, &in->signal) == SOX_SUCCESS)
   free(e);
 
   /* Flow samples through the effects processing chain until EOF is reached */
